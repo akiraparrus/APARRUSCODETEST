@@ -1,0 +1,150 @@
+Question 4 Magic Potion Identifier
+inputNum = int(input('Enter number: '))
+if inputNum >= 0:
+    cube = round(inputNum**(1/3))
+    if cube ** 3 == inputNum:
+        print("YES")
+    else:
+        print("NO")
+
+Question 5 Sneaky outcomes
+
+def find_duplicates(outcomes):
+    seen = set()
+    duplicates = []
+    
+    for outcome in outcomes:
+        if outcome in seen:
+            duplicates.append(outcome)
+        else:
+            seen.add(outcome)
+        
+        # Stop when we have found two duplicates
+        if len(duplicates) == 2:
+            break
+            
+    return duplicates
+
+# Given outcomes array
+outcomes = [123456, 234567, 123347, 456789, 567890, 678901, 789012, 890123, 901234, 112233, 223344, 334455, 789012, 222234, 123347]
+
+# Find and print the duplicates
+print(find_duplicates(outcomes)) #[789012, 123347]
+
+Question 6 Reformat String to Alternating Case
+
+def reformat_string(s):
+    # Collect all alphabetical characters
+    letters = [char for char in s if char.isalpha()]
+    
+    # Alternate the case of the letters
+    for i in range(len(letters)):
+        if i % 2 == 0:
+            letters[i] = letters[i].upper()
+        else:
+            letters[i] = letters[i].lower()
+    
+    # Rebuild the string
+    result = []
+    letter_index = 0
+    
+    for char in s:
+        if char.isalpha():
+            result.append(letters[letter_index])
+            letter_index += 1
+        else:
+            result.append(char)
+    
+    return ''.join(result)
+
+# Given string
+s = "Za^B8g@E2jH*kWl!MoPqXr7YvT1c$Fs3Ud9IwZ&yX0pLkV6sHqN^tB4rA+oZ%gFj"
+
+# Find and print the reformatted string
+print(reformat_string(s)) #Za^B8g@E2jH*kWl!MoPqXr7YvT1c$Fs3Ud9IwZ&yX0pLkV6sHqN^tB4rA+oZ%gFj
+
+
+Question 7  Organizing Books into Identical Sets
+from collections import Counter
+from math import gcd
+from functools import reduce
+
+def can_organize_books(shelf):
+    # Count the occurrences of each book
+    count = Counter(shelf)
+    
+    # Get the counts of the books
+    counts = list(count.values())
+    
+    # Calculate the GCD of the counts
+    overall_gcd = reduce(gcd, counts)
+    
+    # Check if the GCD is greater than 1
+    return "YES" if overall_gcd > 1 else "NO"
+
+# Given shelf array
+shelf = [1234567, 1234567, 2345678, 2345678, 3456789, 3456789, 
+         1234567, 2345678, 3456789, 4567890, 4567890, 5678901, 
+         5678901, 6789012, 6789012, 1234567, 2345678, 3456789, 
+         4567890, 5678901, 4567890, 5678901]
+
+# Find and print the result
+print(can_organize_books(shelf)) #YES
+
+QUESTION 9
+import pandas as pd
+
+# Load the dataset
+url = "nba_player_stats_2023_2024.csv"
+data = pd.read_csv(url)
+
+# Calculate the correlation matrix
+correlation_matrix = data.corr()
+
+# Get the correlation values for PTS
+pts_correlation = correlation_matrix['PTS']
+
+# Sort the correlations by absolute value, excluding PTS itself
+top_correlations = pts_correlation.drop('PTS').abs().sort_values(ascending=False).head(5)
+
+# Get the names of the top 5 correlated metrics
+top_metrics = top_correlations.index.tolist()
+
+# Print the result as a comma-separated string
+print(', '.join(top_metrics))
+
+Question 10
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset
+url = "nba_player_stats_2023_2024.csv"
+data = pd.read_csv(url)
+
+# Define high scorers (PTS >= 20)
+high_scorers = data[data['PTS'] >= 20]
+other_players = data[data['PTS'] < 20]
+
+# Calculate mean values for the specified metrics
+metrics = ['FGA', '3PA', 'FT', 'AST', 'TRB']
+mean_high_scorers = high_scorers[metrics].mean()
+mean_other_players = other_players[metrics].mean()
+
+# Create a DataFrame for plotting
+mean_comparison = pd.DataFrame({
+    'High Scorers': mean_high_scorers,
+    'Other Players': mean_other_players
+})
+
+# Plotting
+mean_comparison.plot(kind='bar', figsize=(10, 6))
+plt.title('Mean Comparison of Metrics Between High Scorers and Other Players')
+plt.ylabel('Mean Value')
+plt.xlabel('Metrics')
+plt.xticks(rotation=45)
+plt.legend(title='Player Type')
+plt.tight_layout()
+
+# Save the plot as an image
+plt.savefig('mean_comparison_nba_players.png')
+plt.show()
